@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap Tracker — iFood / Trilha ML</title>
+<style>
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4ef;
+    --color-background-tertiary: #eeedea;
+    --color-background-info: #e6f1fb;
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5a5a56;
+    --color-text-tertiary: #9a9990;
+    --color-text-info: #185fa5;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.22);
+    --color-border-info: #85b7eb;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --font-sans: system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1e1e1c;
+      --color-background-secondary: #2a2a27;
+      --color-background-tertiary: #232320;
+      --color-background-info: #0c2a45;
+      --color-text-primary: #e8e6de;
+      --color-text-secondary: #a8a69e;
+      --color-text-tertiary: #6a6860;
+      --color-text-info: #85b7eb;
+      --color-border-tertiary: rgba(255,255,255,0.10);
+      --color-border-secondary: rgba(255,255,255,0.18);
+      --color-border-info: #185fa5;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-tertiary);min-height:100vh;padding:2rem 1rem}
+  .container{max-width:720px;margin:0 auto}
+  h1{font-size:18px;font-weight:500;margin-bottom:4px}
+  .subtitle{font-size:13px;color:var(--color-text-tertiary);margin-bottom:1.5rem}
+
+  .top-nav{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
+  .nav-btn{padding:6px 16px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:20px;background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .nav-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+
+  .view{display:none}.view.visible{display:block}
+
+  .stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem}
+  .stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.85rem 1rem}
+  .stat-label{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+  .stat-val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+  .stat-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+
+  .phase-list{display:flex;flex-direction:column;gap:10px}
+  .phase-item{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;cursor:pointer;transition:border-color .15s}
+  .phase-item:hover{border-color:var(--color-border-secondary)}
+  .phase-item.current{border-color:var(--color-border-info);border-width:1.5px}
+  .phase-row-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .pd-1{background:#1D9E75}.pd-2{background:#7F77DD}.pd-3{background:#EF9F27}.pd-4{background:#378ADD}.pd-5{background:#D85A30}
+  .phase-name{font-size:14px;font-weight:500;flex:1}
+  .phase-dur{font-size:12px;color:var(--color-text-tertiary)}
+  .phase-status{font-size:11px;padding:2px 8px;border-radius:10px}
+  .ps-active{background:#E1F5EE;color:#085041}
+  .ps-next{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
+  .bar-track{height:5px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
+  .bf-1{background:#1D9E75}.bf-2{background:#7F77DD}.bf-3{background:#EF9F27}.bf-4{background:#378ADD}.bf-5{background:#D85A30}
+  .phase-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-top:4px}
+
+  .week-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+  .wk-btn{padding:5px 12px;font-size:12px;border:0.5px solid var(--color-border-secondary);border-radius:20px;background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .wk-btn.done{background:#E1F5EE;color:#085041;border-color:#5DCAA5}
+  .wk-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+
+  .week-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem 1.25rem}
+  .week-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.85rem;flex-wrap:wrap;gap:6px}
+  .week-title{font-size:15px;font-weight:500}
+  .week-theme{font-size:12px;color:var(--color-text-tertiary)}
+  .day-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:0.5px solid var(--color-border-tertiary)}
+  .day-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);min-width:28px;padding-top:2px;text-transform:uppercase;letter-spacing:.04em}
+  .day-tasks{flex:1;display:flex;flex-direction:column;gap:5px}
+  .task-item{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
+  .task-check{width:15px;height:15px;border-radius:3px;border:0.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--color-background-primary)}
+  .task-check.checked{background:#1D9E75;border-color:#1D9E75}
+  .chk-mark{width:8px;height:5px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translateY(-1px);display:none}
+  .task-check.checked .chk-mark{display:block}
+  .task-text{font-size:13px;color:var(--color-text-secondary);line-height:1.45;transition:color .15s}
+  .task-text.done-text{color:var(--color-text-tertiary);text-decoration:line-through}
+  .task-pill{font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:2px;white-space:nowrap}
+  .tp-livro{background:#E1F5EE;color:#085041}
+  .tp-projeto{background:#EEEDFE;color:#26215C}
+  .tp-git{background:#FAEEDA;color:#412402}
+  .tp-sql{background:#E6F1FB;color:#0C447C}
+  .week-note{margin-top:.85rem;padding:.65rem .85rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary);line-height:1.55}
+  .deliverable{margin-top:.75rem;border-top:0.5px solid var(--color-border-tertiary);padding-top:.75rem;display:flex;align-items:flex-start;gap:8px}
+  .del-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;padding-top:1px}
+  .del-text{font-size:13px;color:var(--color-text-primary)}
+
+  .books-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .book-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem}
+  .book-phase{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+  .bp-1{color:#1D9E75}.bp-2{color:#7F77DD}.bp-3{color:#EF9F27}.bp-4{color:#378ADD}.bp-5{color:#D85A30}
+  .book-title{font-size:14px;font-weight:500;margin-bottom:2px}
+  .book-author{font-size:12px;color:var(--color-text-tertiary);margin-bottom:8px}
+  .book-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:10px}
+  .book-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px}
+  .read-slider{width:100%;accent-color:#1D9E75}
+
+  .save-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-tertiary);margin-top:1rem}
+  .save-dot{width:6px;height:6px;border-radius:50%;background:#1D9E75}
+
+  @media(max-width:500px){
+    .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .books-grid{grid-template-columns:minmax(0,1fr)}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Roadmap Tracker — Trilha iFood / ML</h1>
+  <div class="subtitle">Progresso salvo automaticamente no navegador</div>
+
+  <div class="top-nav">
+    <button class="nav-btn active" onclick="showView('overview')">Visão geral</button>
+    <button class="nav-btn" onclick="showView('fase1')">Fase 1 — Semanas</button>
+    <button class="nav-btn" onclick="showView('livros')">Livros</button>
+  </div>
+
+  <div id="view-overview" class="view visible">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Progresso geral</div><div class="stat-val" id="ov-pct">0%</div><div class="stat-sub">de 18 meses</div></div>
+      <div class="stat-card"><div class="stat-label">Fase atual</div><div class="stat-val" id="ov-fase">1</div><div class="stat-sub" id="ov-fase-nome">Python sólido</div></div>
+      <div class="stat-card"><div class="stat-label">Tarefas F1</div><div class="stat-val" id="ov-tasks">0</div><div class="stat-sub" id="ov-tasks-sub">de 40 concluídas</div></div>
+      <div class="stat-card"><div class="stat-label">Semana ativa</div><div class="stat-val" id="ov-week">1</div><div class="stat-sub">de 8 na Fase 1</div></div>
+    </div>
+    <div class="phase-list" id="phase-list"></div>
+  </div>
+
+  <div id="view-fase1" class="view">
+    <div class="week-nav" id="week-nav"></div>
+    <div id="week-content"></div>
+  </div>
+
+  <div id="view-livros" class="view">
+    <div class="books-grid" id="books-grid"></div>
+  </div>
+
+  <div class="save-badge"><div class="save-dot"></div><span id="save-status">Carregando...</span></div>
+</div>
+
+<script>
+const STORAGE_KEY = 'ifood-roadmap-v1';
+
+const phases = [
+  {num:1,name:"Python sólido e estruturas de dados",dur:"2 meses",color:"pd-1",bar:"bf-1",totalTasks:40},
+  {num:2,name:"Machine Learning clássico + estatística",dur:"3 meses",color:"pd-2",bar:"bf-2",totalTasks:0},
+  {num:3,name:"APIs, deploy e engenharia de dados",dur:"3 meses",color:"pd-3",bar:"bf-3",totalTasks:0},
+  {num:4,name:"LLMs, engenharia de prompt e agentes",dur:"4 meses",color:"pd-4",bar:"bf-4",totalTasks:0},
+  {num:5,name:"Portfólio, Databricks e entrevistas",dur:"3 meses",color:"pd-5",bar:"bf-5",totalTasks:0},
+];
+
+const weeks = [
+  {num:1,theme:"Ambiente + Python idiomático",days:[
+    {d:"Seg",tasks:[{t:"Configurar ambiente: Python 3.11, venv, VS Code + extensões",pill:"tp-git",label:"git"},{t:"Criar repositório GitHub: fase-1-ifood com README inicial",pill:"tp-git",label:"git"}]},
+    {d:"Ter",tasks:[{t:"Python Fluente — Cap. 1: modelo de dados e protocolos",pill:"tp-livro",label:"livro"},{t:"Python Fluente — Cap. 2: estruturas de sequências",pill:"tp-livro",label:"livro"}]},
+    {d:"Qua",tasks:[{t:"Exercício: implementar uma classe que se comporta como lista",pill:"tp-projeto",label:"proj"},{t:"Python Fluente — Cap. 3: dicionários e conjuntos",pill:"tp-livro",label:"livro"}]},
+    {d:"Qui",tasks:[{t:"Python Fluente — Cap. 4: strings, bytes e encodings",pill:"tp-livro",label:"livro"},{t:"Prática: ler e parsear arquivo CSV manualmente (sem Pandas)",pill:"tp-projeto",label:"proj"}]},
+    {d:"Sex",tasks:[{t:"Revisão dos caps. 1–4 com anotações no Obsidian ou Notion",pill:"tp-livro",label:"livro"},{t:"Commit dos exercícios da semana no GitHub",pill:"tp-git",label:"git"}]},
+  ],note:"Foco em fechar lacunas de Python que talvez nunca foram formalizadas. Não pule os exercícios — eles revelam exatamente onde estão os buracos.",deliverable:"Repositório GitHub criado, primeiros commits, anotações das caps. 1–4"},
+  {num:2,theme:"Funções avançadas e tipagem",days:[
+    {d:"Seg",tasks:[{t:"Python Fluente — Cap. 5: funções de primeira classe",pill:"tp-livro",label:"livro"},{t:"Exercício: map, filter e reduce sem usar bibliotecas",pill:"tp-projeto",label:"proj"}]},
+    {d:"Ter",tasks:[{t:"Python Fluente — Cap. 6: funções como objetos e closures",pill:"tp-livro",label:"livro"},{t:"Prática: criar decoradores simples (timer, logger)",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qua",tasks:[{t:"Python Fluente — Cap. 7: decoradores e clausuras aprofundados",pill:"tp-livro",label:"livro"},{t:"Adicionar type hints em todos os exercícios anteriores",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qui",tasks:[{t:"Introdução a mypy: rodar checagem estática nos seus scripts",pill:"tp-git",label:"git"},{t:"SQL para Análise — Cap. 1: SELECT, WHERE, ORDER BY e aliases",pill:"tp-sql",label:"sql"}]},
+    {d:"Sex",tasks:[{t:"SQL para Análise — Cap. 2: GROUP BY, HAVING e funções agregadas",pill:"tp-sql",label:"sql"},{t:"Prática SQL: 10 queries no SQLiteOnline com dados fictícios de pedidos",pill:"tp-projeto",label:"proj"}]},
+  ],note:"Closures e decoradores aparecem em code review de times sênior. Entender bem aqui vai te diferenciar mais tarde.",deliverable:"Módulo de decoradores no GitHub + 10 queries SQL documentadas"},
+  {num:3,theme:"Iteradores, geradores e contextos",days:[
+    {d:"Seg",tasks:[{t:"Python Fluente — Cap. 8: referências de objetos e mutabilidade",pill:"tp-livro",label:"livro"},{t:"Python Fluente — Cap. 9: uma classe pythônica (vetor 2D)",pill:"tp-livro",label:"livro"}]},
+    {d:"Ter",tasks:[{t:"Python Fluente — Cap. 10: protocolos de sequência e iteração",pill:"tp-livro",label:"livro"},{t:"Exercício: criar um iterador personalizado do zero",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qua",tasks:[{t:"Python Fluente — Cap. 11: interfaces, protocolos e ABCs",pill:"tp-livro",label:"livro"},{t:"Prática: generator expressions vs list comprehension (benchmark)",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qui",tasks:[{t:"SQL para Análise — Cap. 3: joins (INNER, LEFT, RIGHT, FULL)",pill:"tp-sql",label:"sql"},{t:"Prática: queries com 3+ tabelas joinadas, schema de restaurante fictício",pill:"tp-projeto",label:"proj"}]},
+    {d:"Sex",tasks:[{t:"SQL para Análise — Cap. 4: subqueries e CTEs",pill:"tp-sql",label:"sql"},{t:"Revisão semanal + commit e README atualizado",pill:"tp-git",label:"git"}]},
+  ],note:"Geradores são a base de pipelines de dados eficientes. Quando chegar no Airflow e PySpark, vai agradecer por ter entendido isso aqui.",deliverable:"Módulo de iteradores/geradores + queries com CTEs no GitHub"},
+  {num:4,theme:"Início do projeto prático — estrutura",days:[
+    {d:"Seg",tasks:[{t:"Baixar dataset público de pedidos (Olist no Kaggle)",pill:"tp-projeto",label:"proj"},{t:"Exploração inicial: shape, tipos, nulos, distribuições",pill:"tp-projeto",label:"proj"}]},
+    {d:"Ter",tasks:[{t:"Estruturar o projeto: pastas src/, tests/, data/, notebooks/",pill:"tp-git",label:"git"},{t:"Criar requirements.txt e configurar pre-commit com black e flake8",pill:"tp-git",label:"git"}]},
+    {d:"Qua",tasks:[{t:"Implementar módulo de leitura e validação do CSV com type hints",pill:"tp-projeto",label:"proj"},{t:"Primeiros testes unitários com pytest para o módulo de leitura",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qui",tasks:[{t:"SQL para Análise — Cap. 5: window functions (ROW_NUMBER, RANK, LAG)",pill:"tp-sql",label:"sql"},{t:"Aplicar window functions no dataset Olist via DuckDB ou SQLite",pill:"tp-sql",label:"sql"}]},
+    {d:"Sex",tasks:[{t:"Revisão de Python Fluente caps. 5–11 (releitura rápida das anotações)",pill:"tp-livro",label:"livro"},{t:"Push do projeto base com CI do GitHub Actions rodando pytest",pill:"tp-git",label:"git"}]},
+  ],note:"A semana 4 é onde projeto e teoria se encontram. A estrutura montada aqui será o template de todos os projetos futuros.",deliverable:"Repositório do projeto CLI com estrutura, CI e primeiros testes passando"},
+  {num:5,theme:"Pandas avançado e transformações",days:[
+    {d:"Seg",tasks:[{t:"Pandas: groupby, agg e transform no dataset de pedidos",pill:"tp-projeto",label:"proj"},{t:"Pandas: merge e join entre tabelas do Olist",pill:"tp-projeto",label:"proj"}]},
+    {d:"Ter",tasks:[{t:"Pandas: apply com funções customizadas vs vectorização",pill:"tp-projeto",label:"proj"},{t:"Benchmark: apply vs numpy vs vectorizado (medir tempo com timeit)",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qua",tasks:[{t:"Implementar módulo de agregações de KPIs (ticket médio, pedidos por região)",pill:"tp-projeto",label:"proj"},{t:"Testes unitários para o módulo de agregações",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qui",tasks:[{t:"Typer: criar CLI com comandos (analisar, exportar, resumo)",pill:"tp-projeto",label:"proj"},{t:"Testar a CLI manualmente com o dataset real",pill:"tp-projeto",label:"proj"}]},
+    {d:"Sex",tasks:[{t:"Refatorar código com base nos caps. do Python Fluente",pill:"tp-livro",label:"livro"},{t:"Commit com tag v0.1.0 no GitHub",pill:"tp-git",label:"git"}]},
+  ],note:"Pandas bem usado é a diferença entre código que processa 1M de linhas em 2s ou em 2min. Vetorização não é opcional em dados de escala.",deliverable:"CLI funcional com pelo menos 3 comandos e testes cobrindo módulos principais"},
+  {num:6,theme:"Exportação, relatório e visualização",days:[
+    {d:"Seg",tasks:[{t:"Matplotlib/Seaborn: gráficos de distribuição e tendência dos KPIs",pill:"tp-projeto",label:"proj"},{t:"Exportar gráficos como PNG e integrá-los ao relatório",pill:"tp-projeto",label:"proj"}]},
+    {d:"Ter",tasks:[{t:"Implementar exportação CSV e JSON dos resultados da análise",pill:"tp-projeto",label:"proj"},{t:"Testes de integração: rodar CLI do início ao fim e validar outputs",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qua",tasks:[{t:"Logging com o módulo logging: registrar erros e etapas do pipeline",pill:"tp-projeto",label:"proj"},{t:"Tratar exceções corretamente: arquivos inexistentes, colunas faltando",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qui",tasks:[{t:"SQL avançado: reproduzir os KPIs do projeto usando só SQL + DuckDB",pill:"tp-sql",label:"sql"},{t:"Comparar resultados Python vs SQL: devem bater exatamente",pill:"tp-sql",label:"sql"}]},
+    {d:"Sex",tasks:[{t:"Revisão de código: aplicar os princípios do Python Fluente no projeto",pill:"tp-livro",label:"livro"},{t:"Tag v0.2.0 + atualizar README com exemplo de uso e outputs",pill:"tp-git",label:"git"}]},
+  ],note:"Saber comunicar resultados via código é tão importante quanto o código em si. Um README bem feito mostra maturidade para recrutadores técnicos.",deliverable:"CLI exportando CSV, JSON e gráficos. README com prints dos outputs"},
+  {num:7,theme:"Git avançado e GitHub Actions",days:[
+    {d:"Seg",tasks:[{t:"Git: branches, rebase interativo, squash de commits",pill:"tp-git",label:"git"},{t:"Criar branch de feature, trabalhar nela e abrir Pull Request",pill:"tp-git",label:"git"}]},
+    {d:"Ter",tasks:[{t:"GitHub Actions: pipeline CI com lint, testes e type check (mypy)",pill:"tp-git",label:"git"},{t:"Adicionar badge de CI verde no README",pill:"tp-git",label:"git"}]},
+    {d:"Qua",tasks:[{t:"Cobertura de testes: instalar pytest-cov e chegar a 80%+ de cobertura",pill:"tp-projeto",label:"proj"},{t:"Refatorar funções longas em funções menores e testáveis",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qui",tasks:[{t:"SQL: criar view e query analítica com 3 CTEs encadeadas",pill:"tp-sql",label:"sql"},{t:"Documentar a query no projeto como exemplo de análise avançada",pill:"tp-sql",label:"sql"}]},
+    {d:"Sex",tasks:[{t:"Code review simulado: ler o próprio código como se fosse de outra pessoa",pill:"tp-livro",label:"livro"},{t:"Tag v0.3.0 + lista de melhorias futuras no README",pill:"tp-git",label:"git"}]},
+  ],note:"Times como o do iFood trabalham com PRs, CI obrigatório e revisão de código. Isso simula o workflow real — não pule.",deliverable:"CI verde no GitHub com lint + testes + cobertura. Projeto público"},
+  {num:8,theme:"Consolidação e revisão geral",days:[
+    {d:"Seg",tasks:[{t:"Revisão completa: reler todas as anotações das caps. 1–11 do Python Fluente",pill:"tp-livro",label:"livro"},{t:"Identificar 3 conceitos que ainda não ficaram 100% claros",pill:"tp-livro",label:"livro"}]},
+    {d:"Ter",tasks:[{t:"Reescrever do zero um módulo do projeto aplicando tudo que aprendeu",pill:"tp-projeto",label:"proj"},{t:"Comparar com a versão original: o que melhorou?",pill:"tp-projeto",label:"proj"}]},
+    {d:"Qua",tasks:[{t:"SQL: resolver 15 exercícios de nível médio no LeetCode (seção Database)",pill:"tp-sql",label:"sql"},{t:"Anotar os padrões que aparecem com frequência",pill:"tp-sql",label:"sql"}]},
+    {d:"Qui",tasks:[{t:"Escrever post no LinkedIn descrevendo o projeto e o que aprendeu",pill:"tp-git",label:"git"},{t:"Preparar 3 perguntas sobre o projeto para simular entrevista técnica",pill:"tp-livro",label:"livro"}]},
+    {d:"Sex",tasks:[{t:"Versão final v1.0.0 com tag no GitHub",pill:"tp-git",label:"git"},{t:"Planejar Fase 2: ler a introdução do Hands-On ML de Géron",pill:"tp-livro",label:"livro"}]},
+  ],note:"A semana 8 não é descanso — é consolidação. Reescrever código com novos olhos é uma das formas mais eficientes de fixar aprendizado técnico.",deliverable:"Projeto v1.0.0 publicado, post no LinkedIn, pronto para a Fase 2"},
+];
+
+const books = [
+  {phase:1,phaseClass:"bp-1",title:"Python Fluente",author:"Luciano Ramalho — O'Reilly",desc:"Caps. 1–11. O livro definitivo de Python avançado. Leia em paralelo com os projetos da fase.",key:"book-fluente"},
+  {phase:1,phaseClass:"bp-1",title:"SQL for Data Analysis",author:"Cathy Tanimura — O'Reilly",desc:"Caps. 1–5. SQL para quem trabalha com dados: CTEs, window functions e análise aplicada.",key:"book-sql"},
+  {phase:2,phaseClass:"bp-2",title:"Hands-On Machine Learning",author:"Aurélien Géron — O'Reilly",desc:"Caps. 1–11. Scikit-learn de ponta a ponta: pipelines, validação cruzada e tuning.",key:"book-homl"},
+  {phase:2,phaseClass:"bp-2",title:"ISLR — Intro to Statistical Learning",author:"James et al. — Gratuito online",desc:"Caps. 2–6. Regressão, classificação, regularização e reamostragem. Base estatística sólida.",key:"book-islr"},
+  {phase:3,phaseClass:"bp-3",title:"Designing ML Systems",author:"Chip Huyen — O'Reilly",desc:"Leitura completa. O livro mais citado em entrevistas de ML Engineer.",key:"book-chiphuyen"},
+  {phase:3,phaseClass:"bp-3",title:"Fundamentals of Data Engineering",author:"Reis & Housley — O'Reilly",desc:"Caps. 1–5. Ciclo de vida dos dados, armazenamento e orquestração de pipelines.",key:"book-fde"},
+  {phase:4,phaseClass:"bp-4",title:"Building LLM Applications",author:"Valentina Alto — O'Reilly",desc:"Do RAG básico a pipelines com memória e ferramentas externas. Trilha iFood direta.",key:"book-llm"},
+  {phase:5,phaseClass:"bp-5",title:"Ace the Data Science Interview",author:"Nick Singh — Autopublicado",desc:"SQL, estatística, ML e estudo de caso. Leitura paralela nas fases 3–5.",key:"book-ace"},
+];
+
+let state = {tasks:{}, books:{}, activeWeek:1};
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) state = JSON.parse(raw);
+  }catch(e){}
+  renderAll();
+  setSaveStatus('Progresso carregado');
+}
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    setSaveStatus('Salvo agora mesmo');
+  }catch(e){
+    setSaveStatus('Erro ao salvar');
+  }
+}
+
+function setSaveStatus(msg){ const el=document.getElementById('save-status'); if(el) el.textContent=msg; }
+
+function totalF1Tasks(){ return weeks.reduce((a,w)=>a+w.days.reduce((b,d)=>b+d.tasks.length,0),0); }
+function doneF1Tasks(){ return Object.values(state.tasks).filter(Boolean).length; }
+function activeWeekNum(){
+  for(let i=0;i<weeks.length;i++){
+    const w=weeks[i];
+    const keys=w.days.flatMap(d=>d.tasks.map((_,j)=>w.num+'-'+d.d+'-'+j));
+    if(keys.some(k=>!state.tasks[k])) return w.num;
+  }
+  return 8;
+}
+
+function renderAll(){ renderOverview(); renderWeekNav(); renderWeek(state.activeWeek||1); renderBooks(); }
+
+function renderOverview(){
+  const total=totalF1Tasks(), done=doneF1Tasks();
+  const pct=total>0?Math.round(done/total*100):0;
+  const aw=activeWeekNum();
+  document.getElementById('ov-pct').textContent=pct+'%';
+  document.getElementById('ov-tasks').textContent=done;
+  document.getElementById('ov-tasks-sub').textContent='de '+total+' concluídas';
+  document.getElementById('ov-week').textContent=aw;
+  const pl=document.getElementById('phase-list');
+  pl.innerHTML=phases.map(p=>{
+    const taskDone=p.num===1?done:0, taskTotal=p.num===1?total:p.totalTasks;
+    const barPct=taskTotal>0?Math.round(taskDone/taskTotal*100):0;
+    const statusLabel=p.num===1?'<span class="phase-status ps-active">Em andamento</span>':'<span class="phase-status ps-next">A iniciar</span>';
+    return `<div class="phase-item${p.num===1?' current':''}" onclick="showView('fase1')">
+      <div class="phase-row-top">
+        <div class="phase-dot ${p.color}"></div>
+        <span class="phase-name">${p.name}</span>
+        <span class="phase-dur">${p.dur}</span>
+        ${statusLabel}
+      </div>
+      <div class="bar-track"><div class="bar-fill ${p.bar}" style="width:${barPct}%"></div></div>
+      <div class="phase-meta"><span>${p.num===1?done+' de '+total+' tarefas':'aguardando fases anteriores'}</span><span>${barPct}%</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderWeekNav(){
+  const nav=document.getElementById('week-nav');
+  nav.innerHTML=weeks.map(w=>{
+    const keys=w.days.flatMap(d=>d.tasks.map((_,j)=>w.num+'-'+d.d+'-'+j));
+    const allDone=keys.length>0&&keys.every(k=>state.tasks[k]);
+    const active=(state.activeWeek||1)===w.num;
+    return `<button class="wk-btn${allDone?' done':''}${active?' active':''}" onclick="selectWeek(${w.num})">Sem ${w.num}</button>`;
+  }).join('');
+}
+
+function selectWeek(num){ state.activeWeek=num; renderWeekNav(); renderWeek(num); }
+
+function renderWeek(num){
+  const w=weeks[(num||1)-1];
+  const c=document.getElementById('week-content');
+  let html=`<div class="week-card"><div class="week-header"><span class="week-title">Semana ${w.num}</span><span class="week-theme">${w.theme}</span></div>`;
+  w.days.forEach(day=>{
+    html+=`<div class="day-row"><div class="day-label">${day.d}</div><div class="day-tasks">`;
+    day.tasks.forEach((task,i)=>{
+      const key=w.num+'-'+day.d+'-'+i, checked=!!state.tasks[key];
+      html+=`<div class="task-item" onclick="toggleTask('${key}')">
+        <div class="task-check${checked?' checked':''}" id="cb-${key}"><div class="chk-mark"></div></div>
+        <span class="task-text${checked?' done-text':''}" id="txt-${key}">${task.t}</span>
+        <span class="task-pill ${task.pill}">${task.label}</span>
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  html+=`<div class="week-note">${w.note}</div><div class="deliverable"><span class="del-label">Entrega</span><span class="del-text">${w.deliverable}</span></div></div>`;
+  c.innerHTML=html;
+}
+
+function toggleTask(key){
+  state.tasks[key]=!state.tasks[key];
+  const cb=document.getElementById('cb-'+key), txt=document.getElementById('txt-'+key);
+  if(cb) cb.classList.toggle('checked',state.tasks[key]);
+  if(txt) txt.classList.toggle('done-text',state.tasks[key]);
+  renderOverview(); renderWeekNav(); setSaveStatus('Salvando...'); saveState();
+}
+
+function renderBooks(){
+  const grid=document.getElementById('books-grid');
+  grid.innerHTML=books.map(b=>{
+    const pct=state.books[b.key]||0;
+    return `<div class="book-card">
+      <div class="book-phase ${b.phaseClass}">Fase ${b.phase}</div>
+      <div class="book-title">${b.title}</div>
+      <div class="book-author">${b.author}</div>
+      <div class="book-desc">${b.desc}</div>
+      <div class="book-progress-label"><span>Leitura</span><span id="bpct-${b.key}">${pct}%</span></div>
+      <input type="range" class="read-slider" min="0" max="100" step="1" value="${pct}"
+        oninput="updateBook('${b.key}',this.value)" onchange="saveState()">
+    </div>`;
+  }).join('');
+}
+
+function updateBook(key,val){
+  state.books[key]=parseInt(val);
+  const el=document.getElementById('bpct-'+key);
+  if(el) el.textContent=val+'%';
+}
+
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('visible'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('visible');
+  const map={overview:0,fase1:1,livros:2};
+  document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+}
+
+loadState();
+</script>
+</body>
+</html>
