@@ -5,118 +5,123 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Roadmap Tracker — iFood / Trilha ML</title>
 <style>
-  :root {
-    --color-background-primary: #ffffff;
-    --color-background-secondary: #f5f4ef;
-    --color-background-tertiary: #eeedea;
-    --color-background-info: #e6f1fb;
-    --color-text-primary: #1a1a18;
-    --color-text-secondary: #5a5a56;
-    --color-text-tertiary: #9a9990;
-    --color-text-info: #185fa5;
-    --color-border-tertiary: rgba(0,0,0,0.12);
-    --color-border-secondary: rgba(0,0,0,0.22);
-    --color-border-info: #85b7eb;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-    --font-sans: system-ui, -apple-system, sans-serif;
+:root{
+  --bg1:#ffffff;--bg2:#f5f4ef;--bg3:#eeedea;--bgi:#e6f1fb;
+  --t1:#1a1a18;--t2:#5a5a56;--t3:#9a9990;--ti:#185fa5;
+  --bd:rgba(0,0,0,0.12);--bd2:rgba(0,0,0,0.22);--bdi:#85b7eb;
+  --rm:8px;--rl:12px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg1:#1e1e1c;--bg2:#2a2a27;--bg3:#232320;--bgi:#0c2a45;
+    --t1:#e8e6de;--t2:#a8a69e;--t3:#6a6860;--ti:#85b7eb;
+    --bd:rgba(255,255,255,0.10);--bd2:rgba(255,255,255,0.18);--bdi:#185fa5;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-background-primary: #1e1e1c;
-      --color-background-secondary: #2a2a27;
-      --color-background-tertiary: #232320;
-      --color-background-info: #0c2a45;
-      --color-text-primary: #e8e6de;
-      --color-text-secondary: #a8a69e;
-      --color-text-tertiary: #6a6860;
-      --color-text-info: #85b7eb;
-      --color-border-tertiary: rgba(255,255,255,0.10);
-      --color-border-secondary: rgba(255,255,255,0.18);
-      --color-border-info: #185fa5;
-    }
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-tertiary);min-height:100vh;padding:2rem 1rem}
-  .container{max-width:720px;margin:0 auto}
-  h1{font-size:18px;font-weight:500;margin-bottom:4px}
-  .subtitle{font-size:13px;color:var(--color-text-tertiary);margin-bottom:1.5rem}
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;color:var(--t1);background:var(--bg3);min-height:100vh;padding:2rem 1rem}
+.container{max-width:740px;margin:0 auto}
+h1{font-size:18px;font-weight:500;margin-bottom:4px;color:var(--t1)}
+.subtitle{font-size:13px;color:var(--t3);margin-bottom:1.5rem}
+.top-nav{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
+.nav-btn{padding:6px 16px;font-size:13px;border:0.5px solid var(--bd2);border-radius:20px;background:transparent;color:var(--t2);cursor:pointer;transition:all .15s}
+.nav-btn.active{background:var(--bgi);color:var(--ti);border-color:var(--bdi)}
+.view{display:none}.view.visible{display:block}
 
-  .top-nav{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap}
-  .nav-btn{padding:6px 16px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:20px;background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
-  .nav-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem}
+.stat-card{background:var(--bg2);border-radius:var(--rm);padding:.85rem 1rem}
+.stat-label{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:500;color:var(--t1)}
+.stat-sub{font-size:11px;color:var(--t3);margin-top:2px}
 
-  .view{display:none}.view.visible{display:block}
+.phase-list{display:flex;flex-direction:column;gap:10px}
+.phase-item{background:var(--bg1);border:0.5px solid var(--bd);border-radius:var(--rl);padding:1rem 1.25rem;cursor:pointer;transition:border-color .15s}
+.phase-item:hover{border-color:var(--bd2)}
+.phase-item.current{border-color:var(--bdi);border-width:1.5px}
+.phase-row-top{display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pd-1{background:#1D9E75}.pd-2{background:#7F77DD}.pd-3{background:#EF9F27}.pd-4{background:#378ADD}.pd-5{background:#D85A30}
+.phase-name{font-size:14px;font-weight:500;flex:1;color:var(--t1)}
+.phase-status{font-size:11px;padding:2px 8px;border-radius:10px}
+.ps-active{background:#E1F5EE;color:#085041}
+.ps-next{background:var(--bg2);color:var(--t3)}
+.phase-month-range{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:7px;padding-left:20px}
+.bar-track{height:5px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.bf-1{background:#1D9E75}.bf-2{background:#7F77DD}.bf-3{background:#EF9F27}.bf-4{background:#378ADD}.bf-5{background:#D85A30}
+.phase-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--t3);margin-top:4px}
 
-  .stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem}
-  .stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.85rem 1rem}
-  .stat-label{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
-  .stat-val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
-  .stat-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.week-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.wk-btn{padding:5px 12px;font-size:12px;border:0.5px solid var(--bd2);border-radius:20px;background:transparent;color:var(--t2);cursor:pointer;transition:all .15s}
+.wk-btn.done{background:#E1F5EE;color:#085041;border-color:#5DCAA5}
+.wk-btn.active{background:var(--bgi);color:var(--ti);border-color:var(--bdi)}
 
-  .phase-list{display:flex;flex-direction:column;gap:10px}
-  .phase-item{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;cursor:pointer;transition:border-color .15s}
-  .phase-item:hover{border-color:var(--color-border-secondary)}
-  .phase-item.current{border-color:var(--color-border-info);border-width:1.5px}
-  .phase-row-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-  .phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-  .pd-1{background:#1D9E75}.pd-2{background:#7F77DD}.pd-3{background:#EF9F27}.pd-4{background:#378ADD}.pd-5{background:#D85A30}
-  .phase-name{font-size:14px;font-weight:500;flex:1}
-  .phase-dur{font-size:12px;color:var(--color-text-tertiary)}
-  .phase-status{font-size:11px;padding:2px 8px;border-radius:10px}
-  .ps-active{background:#E1F5EE;color:#085041}
-  .ps-next{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
-  .bar-track{height:5px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
-  .bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
-  .bf-1{background:#1D9E75}.bf-2{background:#7F77DD}.bf-3{background:#EF9F27}.bf-4{background:#378ADD}.bf-5{background:#D85A30}
-  .phase-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-top:4px}
+.week-card{background:var(--bg1);border:0.5px solid var(--bd);border-radius:var(--rl);padding:1.1rem 1.25rem}
+.week-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.85rem;flex-wrap:wrap;gap:6px}
+.week-title{font-size:15px;font-weight:500;color:var(--t1)}
+.week-theme{font-size:12px;color:var(--t3)}
+.day-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:0.5px solid var(--bd)}
+.day-label{font-size:11px;font-weight:500;color:var(--t3);min-width:28px;padding-top:2px;text-transform:uppercase;letter-spacing:.04em}
+.day-tasks{flex:1;display:flex;flex-direction:column;gap:5px}
+.task-item{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
+.task-check{width:15px;height:15px;border-radius:3px;border:0.5px solid var(--bd2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--bg1)}
+.task-check.checked{background:#1D9E75;border-color:#1D9E75}
+.chk-mark{width:8px;height:5px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translateY(-1px);display:none}
+.task-check.checked .chk-mark{display:block}
+.task-text{font-size:13px;color:var(--t2);line-height:1.45}
+.task-text.done-text{color:var(--t3);text-decoration:line-through}
+.task-pill{font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:2px;white-space:nowrap}
+.tp-livro{background:#E1F5EE;color:#085041}
+.tp-projeto{background:#EEEDFE;color:#26215C}
+.tp-git{background:#FAEEDA;color:#412402}
+.tp-sql{background:#E6F1FB;color:#0C447C}
+.week-note{margin-top:.85rem;padding:.65rem .85rem;background:var(--bg2);border-radius:var(--rm);font-size:12px;color:var(--t2);line-height:1.55}
+.deliverable{margin-top:.75rem;border-top:0.5px solid var(--bd);padding-top:.75rem;display:flex;align-items:flex-start;gap:8px}
+.del-label{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;padding-top:1px}
+.del-text{font-size:13px;color:var(--t1)}
 
-  .week-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
-  .wk-btn{padding:5px 12px;font-size:12px;border:0.5px solid var(--color-border-secondary);border-radius:20px;background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
-  .wk-btn.done{background:#E1F5EE;color:#085041;border-color:#5DCAA5}
-  .wk-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.proj-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.pf-btn{padding:5px 12px;font-size:12px;border:0.5px solid var(--bd2);border-radius:20px;background:transparent;color:var(--t2);cursor:pointer;transition:all .15s}
+.pf-btn.active{background:var(--bgi);color:var(--ti);border-color:var(--bdi)}
 
-  .week-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem 1.25rem}
-  .week-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.85rem;flex-wrap:wrap;gap:6px}
-  .week-title{font-size:15px;font-weight:500}
-  .week-theme{font-size:12px;color:var(--color-text-tertiary)}
-  .day-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:0.5px solid var(--color-border-tertiary)}
-  .day-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);min-width:28px;padding-top:2px;text-transform:uppercase;letter-spacing:.04em}
-  .day-tasks{flex:1;display:flex;flex-direction:column;gap:5px}
-  .task-item{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
-  .task-check{width:15px;height:15px;border-radius:3px;border:0.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--color-background-primary)}
-  .task-check.checked{background:#1D9E75;border-color:#1D9E75}
-  .chk-mark{width:8px;height:5px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translateY(-1px);display:none}
-  .task-check.checked .chk-mark{display:block}
-  .task-text{font-size:13px;color:var(--color-text-secondary);line-height:1.45;transition:color .15s}
-  .task-text.done-text{color:var(--color-text-tertiary);text-decoration:line-through}
-  .task-pill{font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:2px;white-space:nowrap}
-  .tp-livro{background:#E1F5EE;color:#085041}
-  .tp-projeto{background:#EEEDFE;color:#26215C}
-  .tp-git{background:#FAEEDA;color:#412402}
-  .tp-sql{background:#E6F1FB;color:#0C447C}
-  .week-note{margin-top:.85rem;padding:.65rem .85rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary);line-height:1.55}
-  .deliverable{margin-top:.75rem;border-top:0.5px solid var(--color-border-tertiary);padding-top:.75rem;display:flex;align-items:flex-start;gap:8px}
-  .del-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;padding-top:1px}
-  .del-text{font-size:13px;color:var(--color-text-primary)}
+.proj-card{background:var(--bg1);border:0.5px solid var(--bd);border-radius:var(--rl);padding:1.1rem 1.25rem;margin-bottom:10px}
+.proj-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.proj-title{font-size:14px;font-weight:500;color:var(--t1)}
+.proj-phase-badge{font-size:11px;padding:2px 10px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+.ppb-1{background:#E1F5EE;color:#085041}
+.ppb-2{background:#EEEDFE;color:#26215C}
+.ppb-3{background:#FAEEDA;color:#412402}
+.ppb-4{background:#E6F1FB;color:#0C447C}
+.ppb-5{background:#FAECE7;color:#712B13}
+.proj-summary{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:10px}
+.proj-expand-btn{font-size:12px;color:var(--ti);cursor:pointer;background:none;border:none;padding:0;margin-bottom:4px;display:block}
+.proj-detail{display:none;border-top:0.5px solid var(--bd);padding-top:10px;margin-top:6px}
+.proj-detail.open{display:block}
+.proj-detail-section{margin-bottom:12px}
+.proj-detail-label{font-size:11px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.proj-step{display:flex;gap:8px;font-size:12px;color:var(--t2);margin-bottom:6px;line-height:1.5}
+.step-num{width:18px;height:18px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--t3);flex-shrink:0;margin-top:1px}
+.proj-tech{display:flex;gap:5px;flex-wrap:wrap}
+.tech-tag{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--bg2);color:var(--t2);border:0.5px solid var(--bd)}
+.proj-outcome{font-size:12px;color:var(--t2);line-height:1.55;background:var(--bg2);border-radius:var(--rm);padding:.65rem .85rem}
 
-  .books-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .book-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem}
-  .book-phase{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
-  .bp-1{color:#1D9E75}.bp-2{color:#7F77DD}.bp-3{color:#EF9F27}.bp-4{color:#378ADD}.bp-5{color:#D85A30}
-  .book-title{font-size:14px;font-weight:500;margin-bottom:2px}
-  .book-author{font-size:12px;color:var(--color-text-tertiary);margin-bottom:8px}
-  .book-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:10px}
-  .book-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px}
-  .read-slider{width:100%;accent-color:#1D9E75}
+.books-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.book-card{background:var(--bg1);border:0.5px solid var(--bd);border-radius:var(--rl);padding:1rem 1.1rem}
+.book-phase-tag{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.bp-1{color:#1D9E75}.bp-2{color:#7F77DD}.bp-3{color:#EF9F27}.bp-4{color:#378ADD}.bp-5{color:#D85A30}
+.book-title{font-size:14px;font-weight:500;margin-bottom:2px;color:var(--t1)}
+.book-author{font-size:12px;color:var(--t3);margin-bottom:8px}
+.book-desc{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:10px}
+.book-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--t3);margin-bottom:4px}
+input[type=range]{width:100%;accent-color:#1D9E75}
 
-  .save-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-tertiary);margin-top:1rem}
-  .save-dot{width:6px;height:6px;border-radius:50%;background:#1D9E75}
+.save-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);margin-top:1rem}
+.save-dot{width:6px;height:6px;border-radius:50%;background:#1D9E75}
 
-  @media(max-width:500px){
-    .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .books-grid{grid-template-columns:minmax(0,1fr)}
-  }
+@media(max-width:520px){
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .books-grid{grid-template-columns:minmax(0,1fr)}
+}
 </style>
 </head>
 <body>
@@ -127,13 +132,14 @@
   <div class="top-nav">
     <button class="nav-btn active" onclick="showView('overview')">Visão geral</button>
     <button class="nav-btn" onclick="showView('fase1')">Fase 1 — Semanas</button>
+    <button class="nav-btn" onclick="showView('projetos')">Projetos</button>
     <button class="nav-btn" onclick="showView('livros')">Livros</button>
   </div>
 
   <div id="view-overview" class="view visible">
     <div class="stats-grid">
       <div class="stat-card"><div class="stat-label">Progresso geral</div><div class="stat-val" id="ov-pct">0%</div><div class="stat-sub">de 18 meses</div></div>
-      <div class="stat-card"><div class="stat-label">Fase atual</div><div class="stat-val" id="ov-fase">1</div><div class="stat-sub" id="ov-fase-nome">Python sólido</div></div>
+      <div class="stat-card"><div class="stat-label">Fase atual</div><div class="stat-val" id="ov-fase">1</div><div class="stat-sub">Python sólido</div></div>
       <div class="stat-card"><div class="stat-label">Tarefas F1</div><div class="stat-val" id="ov-tasks">0</div><div class="stat-sub" id="ov-tasks-sub">de 40 concluídas</div></div>
       <div class="stat-card"><div class="stat-label">Semana ativa</div><div class="stat-val" id="ov-week">1</div><div class="stat-sub">de 8 na Fase 1</div></div>
     </div>
@@ -145,6 +151,11 @@
     <div id="week-content"></div>
   </div>
 
+  <div id="view-projetos" class="view">
+    <div class="proj-filter" id="proj-filter"></div>
+    <div id="proj-list"></div>
+  </div>
+
   <div id="view-livros" class="view">
     <div class="books-grid" id="books-grid"></div>
   </div>
@@ -153,17 +164,17 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'ifood-roadmap-v1';
+const STORAGE_KEY='ifood-roadmap-v2';
 
-const phases = [
-  {num:1,name:"Python sólido e estruturas de dados",dur:"2 meses",color:"pd-1",bar:"bf-1",totalTasks:40},
-  {num:2,name:"Machine Learning clássico + estatística",dur:"3 meses",color:"pd-2",bar:"bf-2",totalTasks:0},
-  {num:3,name:"APIs, deploy e engenharia de dados",dur:"3 meses",color:"pd-3",bar:"bf-3",totalTasks:0},
-  {num:4,name:"LLMs, engenharia de prompt e agentes",dur:"4 meses",color:"pd-4",bar:"bf-4",totalTasks:0},
-  {num:5,name:"Portfólio, Databricks e entrevistas",dur:"3 meses",color:"pd-5",bar:"bf-5",totalTasks:0},
+const phases=[
+  {num:1,name:"Python sólido e estruturas de dados",   months:"Meses 1 – 2",  color:"pd-1",bar:"bf-1",totalTasks:40},
+  {num:2,name:"Machine Learning clássico + estatística",months:"Meses 3 – 5",  color:"pd-2",bar:"bf-2",totalTasks:0},
+  {num:3,name:"APIs, deploy e engenharia de dados",     months:"Meses 6 – 8",  color:"pd-3",bar:"bf-3",totalTasks:0},
+  {num:4,name:"LLMs, engenharia de prompt e agentes",   months:"Meses 9 – 12", color:"pd-4",bar:"bf-4",totalTasks:0},
+  {num:5,name:"Portfólio, Databricks e entrevistas",    months:"Meses 13 – 18",color:"pd-5",bar:"bf-5",totalTasks:0},
 ];
 
-const weeks = [
+const weeks=[
   {num:1,theme:"Ambiente + Python idiomático",days:[
     {d:"Seg",tasks:[{t:"Configurar ambiente: Python 3.11, venv, VS Code + extensões",pill:"tp-git",label:"git"},{t:"Criar repositório GitHub: fase-1-ifood com README inicial",pill:"tp-git",label:"git"}]},
     {d:"Ter",tasks:[{t:"Python Fluente — Cap. 1: modelo de dados e protocolos",pill:"tp-livro",label:"livro"},{t:"Python Fluente — Cap. 2: estruturas de sequências",pill:"tp-livro",label:"livro"}]},
@@ -198,7 +209,7 @@ const weeks = [
     {d:"Qua",tasks:[{t:"Implementar módulo de agregações de KPIs (ticket médio, pedidos por região)",pill:"tp-projeto",label:"proj"},{t:"Testes unitários para o módulo de agregações",pill:"tp-projeto",label:"proj"}]},
     {d:"Qui",tasks:[{t:"Typer: criar CLI com comandos (analisar, exportar, resumo)",pill:"tp-projeto",label:"proj"},{t:"Testar a CLI manualmente com o dataset real",pill:"tp-projeto",label:"proj"}]},
     {d:"Sex",tasks:[{t:"Refatorar código com base nos caps. do Python Fluente",pill:"tp-livro",label:"livro"},{t:"Commit com tag v0.1.0 no GitHub",pill:"tp-git",label:"git"}]},
-  ],note:"Pandas bem usado é a diferença entre código que processa 1M de linhas em 2s ou em 2min. Vetorização não é opcional em dados de escala.",deliverable:"CLI funcional com pelo menos 3 comandos e testes cobrindo módulos principais"},
+  ],note:"Pandas bem usado é a diferença entre código que processa 1M de linhas em 2s ou 2min. Vetorização não é opcional em dados de escala.",deliverable:"CLI funcional com pelo menos 3 comandos e testes cobrindo módulos principais"},
   {num:6,theme:"Exportação, relatório e visualização",days:[
     {d:"Seg",tasks:[{t:"Matplotlib/Seaborn: gráficos de distribuição e tendência dos KPIs",pill:"tp-projeto",label:"proj"},{t:"Exportar gráficos como PNG e integrá-los ao relatório",pill:"tp-projeto",label:"proj"}]},
     {d:"Ter",tasks:[{t:"Implementar exportação CSV e JSON dos resultados da análise",pill:"tp-projeto",label:"proj"},{t:"Testes de integração: rodar CLI do início ao fim e validar outputs",pill:"tp-projeto",label:"proj"}]},
@@ -222,98 +233,126 @@ const weeks = [
   ],note:"A semana 8 não é descanso — é consolidação. Reescrever código com novos olhos é uma das formas mais eficientes de fixar aprendizado técnico.",deliverable:"Projeto v1.0.0 publicado, post no LinkedIn, pronto para a Fase 2"},
 ];
 
-const books = [
+const projects=[
+  {id:"p1",phase:1,badge:"ppb-1",phaseLabel:"Fase 1 — Meses 1–2",
+   title:"CLI de análise de pedidos",
+   summary:"Script de linha de comando que lê o dataset Olist (CSV), filtra, agrega KPIs e exporta relatório. Projeto estruturante da Fase 1.",
+   steps:["Baixar o dataset Olist no Kaggle (Brazilian E-Commerce Public Dataset).","Criar estrutura de pastas: src/, tests/, data/raw/, notebooks/ com README inicial.","Implementar módulo de leitura (src/reader.py) com validação de schema e type hints.","Implementar módulo de agregações (src/analytics.py): ticket médio, pedidos por estado, tempo médio de entrega.","Criar interface CLI com Typer: comandos analisar, exportar e resumo.","Exportar resultados em CSV, JSON e gráficos PNG via Matplotlib.","Escrever testes unitários com pytest para reader.py e analytics.py (cobertura mínima 80%).","Configurar GitHub Actions com CI rodando lint (flake8), type check (mypy) e testes.","Publicar v1.0.0 com tag no GitHub e README com prints dos outputs e exemplo de uso."],
+   techs:["Python 3.11","Pandas","Typer","Matplotlib","pytest","GitHub Actions","DuckDB"],
+   outcome:"Portfólio público com projeto completo, CI verde e README profissional. Demonstra domínio de Python, Pandas e boas práticas de engenharia."},
+  {id:"p2",phase:2,badge:"ppb-2",phaseLabel:"Fase 2 — Meses 3–5",
+   title:"Modelo de churn de restaurantes",
+   summary:"Pipeline de ML completo para prever restaurantes com risco de sair da plataforma, cobrindo todo o ciclo de vida do modelo.",
+   steps:["Usar dataset Olist ou sintético para simular comportamento de restaurantes (pedidos, avaliações, cancelamentos).","Análise exploratória: distribuições, correlações, missing values e outliers documentados em notebook.","Feature engineering: taxa de cancelamento, ticket médio semanal, variação de avaliações.","Treinar modelos: Logistic Regression, Random Forest e XGBoost com Scikit-learn.","Validação com cross-validation estratificado (k=5) e métricas: AUC-ROC, precision, recall, F1.","Tuning de hiperparâmetros com GridSearchCV ou Optuna no melhor modelo.","Análise de importância de features com SHAP values para explicabilidade.","Documentar experimentos no MLflow (parâmetros, métricas, artefatos).","Criar relatório final em Markdown com gráficos e interpretação dos resultados."],
+   techs:["Scikit-learn","XGBoost","SHAP","MLflow","Optuna","Pandas","Matplotlib","Jupyter"],
+   outcome:"Notebook e scripts publicados com análise de explicabilidade. Demonstra domínio de ML clássico, experimentação e boas práticas de ciclo de vida."},
+  {id:"p3",phase:2,badge:"ppb-2",phaseLabel:"Fase 2 — Meses 3–5",
+   title:"Teste A/B simulado",
+   summary:"Simule um experimento controlado com dados sintéticos, calcule significância estatística e apresente resultados como relatório de negócio.",
+   steps:["Gerar dados sintéticos de dois grupos (controle e tratamento) com numpy e scipy.","Definir hipótese nula e alternativa, escolher nível de significância (α = 0.05).","Calcular tamanho amostral necessário com análise de poder estatístico.","Aplicar teste t de Student e teste de Mann-Whitney (paramétrico e não-paramétrico).","Calcular e interpretar p-value, intervalo de confiança e effect size (Cohen's d).","Visualizar distribuições dos grupos e resultados com Matplotlib/Seaborn.","Escrever relatório executivo: o que foi testado, conclusão e recomendação de negócio."],
+   techs:["Python","NumPy","SciPy","Pandas","Matplotlib","Seaborn","Jupyter"],
+   outcome:"Relatório de A/B test publicado no GitHub. Demonstra raciocínio estatístico aplicado a decisões de negócio — habilidade muito cobrada em entrevistas."},
+  {id:"p4",phase:3,badge:"ppb-3",phaseLabel:"Fase 3 — Meses 6–8",
+   title:"API de predição com deploy na AWS",
+   summary:"Servir o modelo de churn da Fase 2 como API REST containerizada com deploy real na AWS Free Tier.",
+   steps:["Serializar o modelo treinado com joblib e versionar no repositório.","Criar API REST com FastAPI: endpoint POST /predict que recebe features e retorna probabilidade de churn.","Adicionar validação de payload com Pydantic e tratamento de erros HTTP adequado.","Escrever testes de integração para a API com pytest e httpx.","Containerizar com Docker: Dockerfile multi-stage otimizado para tamanho de imagem.","Fazer push da imagem para Amazon ECR (Elastic Container Registry).","Deploy no AWS App Runner ou EC2 Free Tier e testar o endpoint público.","Adicionar monitoramento básico: logging de requests e métricas no CloudWatch.","Documentar a API com Swagger UI gerado automaticamente pelo FastAPI."],
+   techs:["FastAPI","Pydantic","Docker","AWS ECR","AWS App Runner","pytest","httpx","CloudWatch"],
+   outcome:"API pública e documentada com URL real. Demonstra capacidade de colocar modelos em produção — a habilidade mais valorizada em ML Engineers."},
+  {id:"p5",phase:3,badge:"ppb-3",phaseLabel:"Fase 3 — Meses 6–8",
+   title:"Pipeline MLOps com Airflow + MLflow",
+   summary:"Pipeline orquestrado que executa treino, avaliação e registro de modelo automaticamente em schedule diário.",
+   steps:["Instalar Airflow localmente com Docker Compose (imagem oficial).","Criar DAG de treino: tarefas de ingestão → pré-processamento → treino → avaliação → decisão de promoção.","Integrar MLflow para rastrear cada execução: parâmetros, métricas e artefatos do modelo.","Implementar lógica de promoção: novo modelo só substitui o atual se AUC-ROC >= threshold definido.","Adicionar tarefa de notificação (email ou Slack webhook) ao final de cada execução.","Configurar schedule diário e testar execuções manuais e automáticas.","Documentar a arquitetura do pipeline em diagrama no README."],
+   techs:["Apache Airflow","MLflow","Docker Compose","Python","Scikit-learn","Slack Webhooks"],
+   outcome:"Pipeline reproduzível e auditável publicado no GitHub. Simula diretamente o tipo de trabalho feito nos times de dados do iFood e Nubank."},
+  {id:"p6",phase:4,badge:"ppb-4",phaseLabel:"Fase 4 — Meses 9–12",
+   title:"Agente de suporte a pedidos",
+   summary:"Agente conversacional com LangGraph que consulta status de pedidos fictícios, responde dúvidas e escalona casos via ferramentas.",
+   steps:["Modelar o grafo de estados do agente: nós de intenção, consulta, resposta e escalonamento.","Criar ferramentas (tools): buscar_pedido(id), listar_pedidos_usuario(email), criar_ticket(descricao).","Implementar memória de conversação com checkpointing do LangGraph.","Configurar roteamento condicional: se confiança < threshold, escalonar para humano.","Implementar engenharia de prompt: system prompt estruturado com exemplos few-shot.","Testar com casos de uso variados e documentar respostas esperadas vs obtidas.","Criar interface simples com Streamlit para demonstração interativa.","Publicar com README detalhando a arquitetura do grafo e casos de uso."],
+   techs:["LangGraph","LangChain","OpenAI API","Streamlit","Python","Pydantic"],
+   outcome:"Agente funcional publicado com demo. Demonstra domínio de LangGraph — tecnologia explicitamente citada na vaga do iFood."},
+  {id:"p7",phase:4,badge:"ppb-4",phaseLabel:"Fase 4 — Meses 9–12",
+   title:"Pipeline RAG sobre cardápios",
+   summary:"Sistema de perguntas e respostas sobre itens de restaurantes usando embeddings, busca vetorial e LLM.",
+   steps:["Criar dataset de cardápios fictícios (nome, descrição, ingredientes, preço, categoria) em JSON.","Gerar embeddings com OpenAI text-embedding-3-small ou sentence-transformers.","Armazenar embeddings em ChromaDB (local) ou Pinecone (cloud).","Implementar pipeline RAG: query → embedding → busca por similaridade → contexto → LLM → resposta.","Adicionar filtros por restaurante, categoria e faixa de preço na busca vetorial.","Avaliar qualidade das respostas com métricas de RAG: faithfulness e answer relevance.","Criar interface de chat com Streamlit para demonstração.","Documentar decisões de design (chunk size, top-k, threshold) no README."],
+   techs:["LangChain","ChromaDB","OpenAI API","Sentence Transformers","Streamlit","Python","RAGAS"],
+   outcome:"Sistema RAG funcional com avaliação de qualidade. Demonstra construção de sistemas com LLMs além do chat simples — habilidade central na trilha iFood."},
+  {id:"p8",phase:5,badge:"ppb-5",phaseLabel:"Fase 5 — Meses 13–18",
+   title:"Projeto integrador end-to-end",
+   summary:"Pipeline completo que une todos os aprendizados: ingestão → modelo → agente → API. Simula um produto real de dados e IA.",
+   steps:["Definir escopo: sistema de recomendação de restaurantes com agente conversacional de suporte.","Ingestão de dados com pipeline Airflow (diário, com logs e alertas).","Modelo de recomendação treinado e registrado no MLflow.","Agente LangGraph que usa o modelo de recomendação como ferramenta.","API FastAPI expondo recomendações e o agente como endpoints.","Deploy containerizado na AWS com CI/CD via GitHub Actions.","Monitoramento: métricas de negócio (CTR simulado) e operacionais (latência, erros).","README completo com arquitetura, decisões técnicas e instruções de uso.","Post técnico no LinkedIn ou Dev.to descrevendo o projeto e aprendizados."],
+   techs:["Airflow","MLflow","LangGraph","FastAPI","Docker","AWS","GitHub Actions","Streamlit"],
+   outcome:"Portfólio de destaque com projeto completo e publicado. É o projeto que você apresenta em entrevistas como prova concreta de capacidade técnica end-to-end."},
+];
+
+const books=[
   {phase:1,phaseClass:"bp-1",title:"Python Fluente",author:"Luciano Ramalho — O'Reilly",desc:"Caps. 1–11. O livro definitivo de Python avançado. Leia em paralelo com os projetos da fase.",key:"book-fluente"},
   {phase:1,phaseClass:"bp-1",title:"SQL for Data Analysis",author:"Cathy Tanimura — O'Reilly",desc:"Caps. 1–5. SQL para quem trabalha com dados: CTEs, window functions e análise aplicada.",key:"book-sql"},
   {phase:2,phaseClass:"bp-2",title:"Hands-On Machine Learning",author:"Aurélien Géron — O'Reilly",desc:"Caps. 1–11. Scikit-learn de ponta a ponta: pipelines, validação cruzada e tuning.",key:"book-homl"},
-  {phase:2,phaseClass:"bp-2",title:"ISLR — Intro to Statistical Learning",author:"James et al. — Gratuito online",desc:"Caps. 2–6. Regressão, classificação, regularização e reamostragem. Base estatística sólida.",key:"book-islr"},
+  {phase:2,phaseClass:"bp-2",title:"ISLR — Intro to Statistical Learning",author:"James et al. — Gratuito online",desc:"Caps. 2–6. Regressão, classificação, regularização e reamostragem.",key:"book-islr"},
   {phase:3,phaseClass:"bp-3",title:"Designing ML Systems",author:"Chip Huyen — O'Reilly",desc:"Leitura completa. O livro mais citado em entrevistas de ML Engineer.",key:"book-chiphuyen"},
   {phase:3,phaseClass:"bp-3",title:"Fundamentals of Data Engineering",author:"Reis & Housley — O'Reilly",desc:"Caps. 1–5. Ciclo de vida dos dados, armazenamento e orquestração de pipelines.",key:"book-fde"},
   {phase:4,phaseClass:"bp-4",title:"Building LLM Applications",author:"Valentina Alto — O'Reilly",desc:"Do RAG básico a pipelines com memória e ferramentas externas. Trilha iFood direta.",key:"book-llm"},
   {phase:5,phaseClass:"bp-5",title:"Ace the Data Science Interview",author:"Nick Singh — Autopublicado",desc:"SQL, estatística, ML e estudo de caso. Leitura paralela nas fases 3–5.",key:"book-ace"},
 ];
 
-let state = {tasks:{}, books:{}, activeWeek:1};
+let state={tasks:{},books:{},activeWeek:1,projFilter:'all'};
 
 function loadState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw) state = JSON.parse(raw);
-  }catch(e){}
-  renderAll();
-  setSaveStatus('Progresso carregado');
+  try{const r=localStorage.getItem(STORAGE_KEY);if(r)state=JSON.parse(r);}catch(e){}
+  renderAll();setSaveStatus('Progresso carregado');
 }
-
 function saveState(){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    setSaveStatus('Salvo agora mesmo');
-  }catch(e){
-    setSaveStatus('Erro ao salvar');
-  }
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));setSaveStatus('Salvo agora mesmo');}
+  catch(e){setSaveStatus('Erro ao salvar');}
 }
-
-function setSaveStatus(msg){ const el=document.getElementById('save-status'); if(el) el.textContent=msg; }
-
-function totalF1Tasks(){ return weeks.reduce((a,w)=>a+w.days.reduce((b,d)=>b+d.tasks.length,0),0); }
-function doneF1Tasks(){ return Object.values(state.tasks).filter(Boolean).length; }
+function setSaveStatus(m){const el=document.getElementById('save-status');if(el)el.textContent=m;}
+function totalF1(){return weeks.reduce((a,w)=>a+w.days.reduce((b,d)=>b+d.tasks.length,0),0);}
+function doneF1(){return Object.values(state.tasks).filter(Boolean).length;}
 function activeWeekNum(){
   for(let i=0;i<weeks.length;i++){
-    const w=weeks[i];
-    const keys=w.days.flatMap(d=>d.tasks.map((_,j)=>w.num+'-'+d.d+'-'+j));
-    if(keys.some(k=>!state.tasks[k])) return w.num;
+    const w=weeks[i],keys=w.days.flatMap(d=>d.tasks.map((_,j)=>w.num+'-'+d.d+'-'+j));
+    if(keys.some(k=>!state.tasks[k]))return w.num;
   }
   return 8;
 }
 
-function renderAll(){ renderOverview(); renderWeekNav(); renderWeek(state.activeWeek||1); renderBooks(); }
+function renderAll(){renderOverview();renderWeekNav();renderWeek(state.activeWeek||1);renderProjects();renderBooks();}
 
 function renderOverview(){
-  const total=totalF1Tasks(), done=doneF1Tasks();
-  const pct=total>0?Math.round(done/total*100):0;
-  const aw=activeWeekNum();
+  const total=totalF1(),done=doneF1(),pct=total>0?Math.round(done/total*100):0;
   document.getElementById('ov-pct').textContent=pct+'%';
   document.getElementById('ov-tasks').textContent=done;
   document.getElementById('ov-tasks-sub').textContent='de '+total+' concluídas';
-  document.getElementById('ov-week').textContent=aw;
-  const pl=document.getElementById('phase-list');
-  pl.innerHTML=phases.map(p=>{
-    const taskDone=p.num===1?done:0, taskTotal=p.num===1?total:p.totalTasks;
-    const barPct=taskTotal>0?Math.round(taskDone/taskTotal*100):0;
-    const statusLabel=p.num===1?'<span class="phase-status ps-active">Em andamento</span>':'<span class="phase-status ps-next">A iniciar</span>';
+  document.getElementById('ov-week').textContent=activeWeekNum();
+  document.getElementById('phase-list').innerHTML=phases.map(p=>{
+    const td=p.num===1?done:0,tt=p.num===1?total:p.totalTasks,bp=tt>0?Math.round(td/tt*100):0;
+    const status=p.num===1?'<span class="phase-status ps-active">Em andamento</span>':'<span class="phase-status ps-next">A iniciar</span>';
     return `<div class="phase-item${p.num===1?' current':''}" onclick="showView('fase1')">
-      <div class="phase-row-top">
-        <div class="phase-dot ${p.color}"></div>
-        <span class="phase-name">${p.name}</span>
-        <span class="phase-dur">${p.dur}</span>
-        ${statusLabel}
-      </div>
-      <div class="bar-track"><div class="bar-fill ${p.bar}" style="width:${barPct}%"></div></div>
-      <div class="phase-meta"><span>${p.num===1?done+' de '+total+' tarefas':'aguardando fases anteriores'}</span><span>${barPct}%</span></div>
+      <div class="phase-row-top"><div class="phase-dot ${p.color}"></div><span class="phase-name">${p.name}</span>${status}</div>
+      <div class="phase-month-range">${p.months}</div>
+      <div class="bar-track"><div class="bar-fill ${p.bar}" style="width:${bp}%"></div></div>
+      <div class="phase-meta"><span>${p.num===1?done+' de '+total+' tarefas':'aguardando fases anteriores'}</span><span>${bp}%</span></div>
     </div>`;
   }).join('');
 }
 
 function renderWeekNav(){
-  const nav=document.getElementById('week-nav');
-  nav.innerHTML=weeks.map(w=>{
+  document.getElementById('week-nav').innerHTML=weeks.map(w=>{
     const keys=w.days.flatMap(d=>d.tasks.map((_,j)=>w.num+'-'+d.d+'-'+j));
     const allDone=keys.length>0&&keys.every(k=>state.tasks[k]);
     const active=(state.activeWeek||1)===w.num;
     return `<button class="wk-btn${allDone?' done':''}${active?' active':''}" onclick="selectWeek(${w.num})">Sem ${w.num}</button>`;
   }).join('');
 }
-
-function selectWeek(num){ state.activeWeek=num; renderWeekNav(); renderWeek(num); }
+function selectWeek(num){state.activeWeek=num;renderWeekNav();renderWeek(num);}
 
 function renderWeek(num){
   const w=weeks[(num||1)-1];
-  const c=document.getElementById('week-content');
   let html=`<div class="week-card"><div class="week-header"><span class="week-title">Semana ${w.num}</span><span class="week-theme">${w.theme}</span></div>`;
   w.days.forEach(day=>{
     html+=`<div class="day-row"><div class="day-label">${day.d}</div><div class="day-tasks">`;
     day.tasks.forEach((task,i)=>{
-      const key=w.num+'-'+day.d+'-'+i, checked=!!state.tasks[key];
+      const key=w.num+'-'+day.d+'-'+i,checked=!!state.tasks[key];
       html+=`<div class="task-item" onclick="toggleTask('${key}')">
         <div class="task-check${checked?' checked':''}" id="cb-${key}"><div class="chk-mark"></div></div>
         <span class="task-text${checked?' done-text':''}" id="txt-${key}">${task.t}</span>
@@ -323,45 +362,74 @@ function renderWeek(num){
     html+=`</div></div>`;
   });
   html+=`<div class="week-note">${w.note}</div><div class="deliverable"><span class="del-label">Entrega</span><span class="del-text">${w.deliverable}</span></div></div>`;
-  c.innerHTML=html;
+  document.getElementById('week-content').innerHTML=html;
 }
 
 function toggleTask(key){
   state.tasks[key]=!state.tasks[key];
-  const cb=document.getElementById('cb-'+key), txt=document.getElementById('txt-'+key);
-  if(cb) cb.classList.toggle('checked',state.tasks[key]);
-  if(txt) txt.classList.toggle('done-text',state.tasks[key]);
-  renderOverview(); renderWeekNav(); setSaveStatus('Salvando...'); saveState();
+  const cb=document.getElementById('cb-'+key),txt=document.getElementById('txt-'+key);
+  if(cb)cb.classList.toggle('checked',state.tasks[key]);
+  if(txt)txt.classList.toggle('done-text',state.tasks[key]);
+  renderOverview();renderWeekNav();setSaveStatus('Salvando...');saveState();
+}
+
+function renderProjects(){
+  const f=state.projFilter||'all';
+  const labels=[{v:'all',l:'Todos'},{v:'1',l:'Fase 1'},{v:'2',l:'Fase 2'},{v:'3',l:'Fase 3'},{v:'4',l:'Fase 4'},{v:'5',l:'Fase 5'}];
+  document.getElementById('proj-filter').innerHTML=labels.map(x=>`<button class="pf-btn${f===x.v?' active':''}" onclick="setFilter('${x.v}')">${x.l}</button>`).join('');
+  const list=f==='all'?projects:projects.filter(p=>String(p.phase)===f);
+  document.getElementById('proj-list').innerHTML=list.map(p=>`
+    <div class="proj-card">
+      <div class="proj-card-header">
+        <span class="proj-title">${p.title}</span>
+        <span class="proj-phase-badge ${p.badge}">${p.phaseLabel}</span>
+      </div>
+      <p class="proj-summary">${p.summary}</p>
+      <button class="proj-expand-btn" onclick="toggleDetail('${p.id}',this)">Ver detalhamento ▾</button>
+      <div class="proj-detail" id="detail-${p.id}">
+        <div class="proj-detail-section">
+          <div class="proj-detail-label">Passo a passo</div>
+          ${p.steps.map((s,i)=>`<div class="proj-step"><span class="step-num">${i+1}</span><span>${s}</span></div>`).join('')}
+        </div>
+        <div class="proj-detail-section">
+          <div class="proj-detail-label">Tecnologias</div>
+          <div class="proj-tech">${p.techs.map(t=>`<span class="tech-tag">${t}</span>`).join('')}</div>
+        </div>
+        <div class="proj-detail-section">
+          <div class="proj-detail-label">Resultado esperado</div>
+          <div class="proj-outcome">${p.outcome}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function setFilter(v){state.projFilter=v;renderProjects();}
+function toggleDetail(id,btn){
+  const el=document.getElementById('detail-'+id),open=el.classList.toggle('open');
+  btn.textContent=open?'Fechar detalhamento ▴':'Ver detalhamento ▾';
 }
 
 function renderBooks(){
-  const grid=document.getElementById('books-grid');
-  grid.innerHTML=books.map(b=>{
+  document.getElementById('books-grid').innerHTML=books.map(b=>{
     const pct=state.books[b.key]||0;
     return `<div class="book-card">
-      <div class="book-phase ${b.phaseClass}">Fase ${b.phase}</div>
+      <div class="book-phase-tag ${b.phaseClass}">Fase ${b.phase}</div>
       <div class="book-title">${b.title}</div>
       <div class="book-author">${b.author}</div>
       <div class="book-desc">${b.desc}</div>
       <div class="book-progress-label"><span>Leitura</span><span id="bpct-${b.key}">${pct}%</span></div>
-      <input type="range" class="read-slider" min="0" max="100" step="1" value="${pct}"
-        oninput="updateBook('${b.key}',this.value)" onchange="saveState()">
+      <input type="range" min="0" max="100" step="1" value="${pct}" oninput="updateBook('${b.key}',this.value)" onchange="saveState()">
     </div>`;
   }).join('');
 }
-
-function updateBook(key,val){
-  state.books[key]=parseInt(val);
-  const el=document.getElementById('bpct-'+key);
-  if(el) el.textContent=val+'%';
-}
+function updateBook(key,val){state.books[key]=parseInt(val);const el=document.getElementById('bpct-'+key);if(el)el.textContent=val+'%';}
 
 function showView(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('visible'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('view-'+id).classList.add('visible');
-  const map={overview:0,fase1:1,livros:2};
-  document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  const idx={overview:0,fase1:1,projetos:2,livros:3};
+  document.querySelectorAll('.nav-btn')[idx[id]].classList.add('active');
 }
 
 loadState();
