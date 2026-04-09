@@ -1,9 +1,3 @@
-from math import hypot
+list = [int(x) for x in input("Digite alguns numeros separados por ' ': ").split()]
 
-class Vector:
-    def __init__(self, x=0, y=0):
-        self.x = x
-        self.y = y
-
-    def __repr__(self):
-        return 'Vector(%r, %r)' % (self.x, self.y)
+print(list)

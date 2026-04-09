@@ -63,3 +63,34 @@ print(v)         # (2, 4)        — print() prefere __str__
 - Outros métodos especiais cobertos no capítulo: `__len__`, `__getitem__`, `__abs__`, `__bool__`, `__add__`, `__mul__`.
 
 ---
+
+### Capítulo 2 · List Comprehensions and Generator Expressions
+`9 de abril de 2026`
+
+O capituló demonstra como listcomps podem ser mais 'pytonicas' que a sintaxe que estamos acostumados e em alguns casos até mais rapidos que funções de iteração como: **filter e map.**
+
+#### Exemplo prático
+
+```python
+symbols = '$¢£¥€¤'
+codes = []
+for symbol in symbols:
+    codes.append(ord(symbol))
+
+# codes: [36, 162, 163, 165, 8364, 164]
+```
+
+**Uma maneira mais pytonica the escrever o codigo acima seria utilizando uma listcomps:**
+
+```python
+symbols = '$¢£¥€¤'
+codes = [ord(symbol) for symbol in symbols]
+
+# codes: [36, 162, 163, 165, 8364, 164]
+```
+
+#### Pontos-chave do capítulo
+- Listcomps possuem apenas um proposito: criar uma nova lista.
+- Se a lista produzida pela o listcomp não está sendo utilizada em algum lugar, então esse bloco de código não deveria possuir essa sintaxe.
+
+---
